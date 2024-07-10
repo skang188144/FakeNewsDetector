@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@langchain/community": "^0.2.17",
+    "@langchain/google-genai": "^0.0.21",
     "@langchain/langgraph": "^0.0.26",
+    "@langchain/openai": "^0.2.1",
+    "dotenv": "^16.4.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
