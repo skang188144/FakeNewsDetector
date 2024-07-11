@@ -1,7 +1,10 @@
+import 'dotenv/config';
 import { END, START, StateGraph, StateGraphArgs } from '@langchain/langgraph'
-import filterAgent from './Agents/Filter';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+import { filterAgent, discardIfInvalid } from './Agents/Filter';
+import { factCheckerAgent, discardIfNotAFact } from './Agents/FactChecker';
+import { searcherAgent } from './Agents/Searcher';
 
 /**
  * Interface for storing the graph's state
@@ -9,7 +12,8 @@ import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 export interface GraphState {
   llm: ChatGoogleGenerativeAI;
   query: string;
-  queryValidity: boolean
+  queryValidity: boolean;
+  queryIsAFact: boolean
 };
 
 /**
@@ -24,40 +28,56 @@ export interface GraphState {
  * Initialize the graph state
  */
 
-
 const graphState : StateGraphArgs<GraphState>['channels'] = {
-  llm: null
+  llm: // null
+  {
+    value: () =>  new ChatGoogleGenerativeAI({
+      modelName: 'gemini-pro',
+      safetySettings: [{
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+      }],
+      temperature: 0
+    }),
+    default: () => new ChatGoogleGenerativeAI({
+      modelName: 'gemini-pro',
+      safetySettings: [{
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+      }],
+      temperature: 0
+    })
+  },
+  query: // null
+  {
+    value: (oldQuery : string, newQuery : string) => newQuery,
+    default: () => ""
+  },
+  queryValidity: null,
   // {
-  //   reducer: (oldLLM, newLLM) => newLLM,
-  //   default: () => new ChatGoogleGenerativeAI({
-  //     modelName: 'gemini-pro',
-  //     safetySettings: [{
-  //       category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-  //       threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-  //     }]
-  //   })
-  // }
-  ,
-  query: null
-  // {
-  //   reducer: (oldQuery : string, newQuery : string) => newQuery,
-  //   default: () => ""
-  // }
-  ,
-  queryValidity: null
-  // {
-  //   reducer: (queryValidity : boolean) => queryValidity,
+  //   value: (oldQueryValidity : boolean, newQueryValidity : boolean) => newQueryValidity,
   //   default: () => false
-  // }
+  // },
+  queryIsAFact: null
 };
 
 function createGraph() {
   const graph = new StateGraph<GraphState>({
     channels: graphState
   })
-  .addNode('filterNode', filterAgent)
-  .addEdge(START, 'filterNode')
-  .addEdge('filterNode', END)
+  .addNode('filterAgent', filterAgent)
+  .addNode('factCheckerAgent', factCheckerAgent)
+  .addNode('searcherAgent', searcherAgent)
+  .addEdge(START, 'filterAgent')
+  .addConditionalEdges('filterAgent', discardIfInvalid, {
+    factCheckerAgent: 'factCheckerAgent',
+    end: END
+  })
+  .addConditionalEdges('factCheckerAgent', discardIfNotAFact, {
+    searcherAgent: 'searcherAgent',
+    end: END
+  })
+  .addEdge('searcherAgent', END)
   .compile();
 
   return graph;
@@ -70,12 +90,14 @@ async function main() {
       safetySettings: [{
         category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
         threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-      }]
+      }],
+      temperature: 0
     }), 
-    query: 'testing testing testing'
+    query: 'Pizza is made with glue.'
   });
 
-  console.log(result1);
+  const result = await result1.then((r) => [r.query, r.queryValidity, r.queryIsAFact]);
+  await console.log(result);
 }
 
 main();
