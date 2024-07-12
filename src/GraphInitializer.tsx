@@ -1,16 +1,20 @@
 import 'dotenv/config';
 import { END, START, StateGraph, StateGraphArgs } from '@langchain/langgraph'
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
-import { filterAgent, discardIfInvalid } from './Agents/Filter';
-import { factCheckerAgent, discardIfNotAFact } from './Agents/FactChecker';
 import { searcherAgent } from './Agents/Searcher';
+import { ChatOpenAI } from '@langchain/openai';
+import { grammaticalFilterAgent, grammaticalFilterRouter } from './Agents/GrammaticalFilter';
+import { factCheckerAgent, discardIfNotAFact } from './Agents/FactChecker';
+import { propositionFilterAgent, propositionFilterRouter } from './Agents/PropositionFilter';
+import { questionFilterAgent, questionFilterRouter } from './Agents/QuestionFilter';
+import { opinionFilterAgent, opinionFilterRouter } from './Agents/OpinionFilter';
+import { publicKnowledgeFilterAgent, publicKnowledgeFilterRouter } from './Agents/PublicKnowledgeFilter';
 
 /**
  * Interface for storing the graph's state
  */
 export interface GraphState {
-  llm: ChatGoogleGenerativeAI;
+  llm: ChatOpenAI; 
+  //ChatGoogleGenerativeAI;
   query: string;
   queryValidity: boolean;
   queryIsAFact: boolean
@@ -31,22 +35,30 @@ export interface GraphState {
 const graphState : StateGraphArgs<GraphState>['channels'] = {
   llm: // null
   {
-    value: () =>  new ChatGoogleGenerativeAI({
-      modelName: 'gemini-pro',
-      safetySettings: [{
-        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-      }],
+    value: () => new ChatOpenAI({
+      modelName: 'gpt-3.5-turbo',
       temperature: 0
     }),
-    default: () => new ChatGoogleGenerativeAI({
-      modelName: 'gemini-pro',
-      safetySettings: [{
-        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-      }],
+    default: () => new ChatOpenAI({
+      modelName: 'gpt-3.5-turbo',
       temperature: 0
     })
+    // value: () =>  new ChatGoogleGenerativeAI({
+    //   modelName: 'gemini-pro',
+    //   safetySettings: [{
+    //     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    //     threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    //   }],
+    //   temperature: 0
+    // }),
+    // default: () => new ChatGoogleGenerativeAI({
+    //   modelName: 'gemini-pro',
+    //   safetySettings: [{
+    //     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    //     threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    //   }],
+    //   temperature: 0
+    // })
   },
   query: // null
   {
@@ -65,11 +77,31 @@ function createGraph() {
   const graph = new StateGraph<GraphState>({
     channels: graphState
   })
-  .addNode('filterAgent', filterAgent)
+  .addNode('grammaticalFilterAgent', grammaticalFilterAgent)
+  .addNode('propositionFilterAgent', propositionFilterAgent)
+  .addNode('questionFilterAgent', questionFilterAgent)
+  .addNode('opinionFilterAgent', opinionFilterAgent)
+  .addNode('publicKnowledgeFilterAgent', publicKnowledgeFilterAgent)
   .addNode('factCheckerAgent', factCheckerAgent)
   .addNode('searcherAgent', searcherAgent)
-  .addEdge(START, 'filterAgent')
-  .addConditionalEdges('filterAgent', discardIfInvalid, {
+  .addEdge(START, 'grammaticalFilterAgent')
+  .addConditionalEdges('grammaticalFilterAgent', grammaticalFilterRouter, {
+    propositionFilterAgent: 'propositionFilterAgent',
+    end: END
+  })
+  .addConditionalEdges('propositionFilterAgent', propositionFilterRouter, {
+    questionFilterAgent: 'questionFilterAgent',
+    end: END
+  })
+  .addConditionalEdges('questionFilterAgent', questionFilterRouter, {
+    opinionFilterAgent: 'opinionFilterAgent',
+    end: END
+  })
+  .addConditionalEdges('opinionFilterAgent', opinionFilterRouter, {
+    publicKnowledgeFilterAgent: 'publicKnowledgeFilterAgent',
+    end: END
+  })
+  .addConditionalEdges('publicKnowledgeFilterAgent', publicKnowledgeFilterRouter, {
     factCheckerAgent: 'factCheckerAgent',
     end: END
   })
@@ -85,15 +117,18 @@ function createGraph() {
 
 async function main() {
   const result1 = createGraph().invoke({ 
-    llm: new ChatGoogleGenerativeAI({
-      modelName: 'gemini-pro',
-      safetySettings: [{
-        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-      }],
-      temperature: 0
-    }), 
-    query: 'Pizza is made with glue.'
+    llm: new ChatOpenAI({
+      modelName: 'gpt-3.5-turbo'
+    }),
+    // new ChatGoogleGenerativeAI({
+    //   modelName: 'gemini-pro',
+    //   safetySettings: [{
+    //     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    //     threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    //   }],
+    //   temperature: 0
+    // }),
+    query: 'Pizza is good.'
   });
 
   const result = await result1.then((r) => [r.query, r.queryValidity, r.queryIsAFact]);
