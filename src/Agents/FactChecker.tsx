@@ -2,9 +2,11 @@ import { GraphState } from '../GraphInitializer.tsx'
 import { RunnableConfig } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { QueryTruthfulness } from '../Utilities/StatusCodes.tsx';
+import { queryTruthfulnessOutputStructure } from '../Utilities/OutputStructures.tsx';
 
 export async function factCheckerAgent (state : GraphState, config? : RunnableConfig) {
-  const { llm, query, querySearchResults } = state;
+  const { query, querySearchResults } = state;
+  const llm = state.llm.withStructuredOutput(queryTruthfulnessOutputStructure);
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are a fact checker for a misinformation detector application. Your sole job is to '
@@ -16,42 +18,48 @@ export async function factCheckerAgent (state : GraphState, config? : RunnableCo
              + 'query is true or false, based solely on the knowledge that you have, and without the '
              + 'list of sources that was initially provided to you.\n'
     ],
-    ['user', 'Here is the query:\n'
+    ['user', 'Here is the original query:\n'
            + '{query}\n'
 
-           + 'Like mentioned in your system prompt, you must include two sections in your response. The '
-           + 'first section must include three things: the string TRUE_QUERY or FALSE_QUERY depending on '
-           + 'your determination based solely on the sources; a fraction in the form of x/y representing '
-           + 'the number of sources that agreed with your determination, out of the total number of sources; '
-           + 'and finally a short paragraph summarizing why the sources that agreed with you, did so.\n'
-
-           + 'The second section must include two things: the string TRUE_QUERY or FALSE_QUERY depending on '
-           + 'your determination based solely on your own knowledge, excluding the previous sources; and '
-           + 'finally a short paragraph summarizing why your determination is so.'
+           + 'Here is the list of sources:\n'
+           + '{querySearchResults}'
     ]
   ]);
 
   const chain = prompt.pipe(llm);
 
   const response = await chain.invoke({
-    query: query
+    query: query,
+    querySearchResults: querySearchResults
   });
 
-  console.log(response.content);
+  console.log(response);
 
-  if (response.content.toString().includes('TRUE_QUERY')) {
-    state.queryTruthfulness = QueryTruthfulness.TRUE_QUERY;
-  } else if (response.content.toString().includes('FALSE_QUERY')) {
-    state.queryTruthfulness = QueryTruthfulness.FALSE_QUERY
+  if (response.sourcesTruthfulness === 'TRUE_QUERY') {
+    state.querySourcesTruthfulness = QueryTruthfulness.TRUE_QUERY;
+  } else if (response.sourcesTruthfulness === 'FALSE_QUERY') {
+    state.querySourcesTruthfulness = QueryTruthfulness.FALSE_QUERY;
   } else {
-    state.queryTruthfulness = QueryTruthfulness.QUERY_TRUTHFULNESS_ERROR;
+    state.querySourcesTruthfulness = QueryTruthfulness.QUERY_TRUTHFULNESS_ERROR;
   }
+
+  if (response.internalTruthfulness === 'TRUE_QUERY') {
+    state.queryInternalTruthfulness = QueryTruthfulness.TRUE_QUERY;
+  } else if (response.internalTruthfulness === 'FALSE_QUERY') {
+    state.queryInternalTruthfulness = QueryTruthfulness.FALSE_QUERY;
+  } else {
+    state.queryInternalTruthfulness = QueryTruthfulness.QUERY_TRUTHFULNESS_ERROR;
+  }
+
+  state.querySourcesTruthfulnessRatio = response.sourcesRatio;
+  state.querySourcesTruthfulnessReasoning = response.sourcesReasoning;
+  state.queryInternalTruthfulnessReasoning = response.internalReasoning;
 
   return state;
 }
 
 export function factCheckerRouter(state : GraphState) {
-  const { queryTruthfulness } = state;
+  const { querySourcesTruthfulness: queryTruthfulness } = state;
 
   if (queryTruthfulness === QueryTruthfulness.TRUE_QUERY) {
     return 'searcherAgent';

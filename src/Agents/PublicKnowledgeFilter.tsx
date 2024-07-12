@@ -2,9 +2,11 @@ import { GraphState } from '../GraphInitializer.tsx'
 import { RunnableConfig } from '@langchain/core/runnables';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { QueryValidity } from '../Utilities/StatusCodes.tsx';
+import { queryValidityOutputStructure } from '../Utilities/OutputStructures.tsx';
 
 export async function publicKnowledgeFilterAgent (state : GraphState, config? : RunnableConfig) {
-  const { llm, query } = state;
+  const { query } = state;
+  const llm = state.llm.withStructuredOutput(queryValidityOutputStructure);
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are an AI agent for a certain web application. Your job is to receive queries, and'
@@ -21,9 +23,6 @@ export async function publicKnowledgeFilterAgent (state : GraphState, config? : 
 
            + 'Here is the query:\n'
            + '{query}\n'
-
-           + 'Based solely on the criteria above, please return nothing but a single string of the word '
-           + 'VALID or INVALID.'
     ]
   ]);
 
@@ -33,14 +32,16 @@ export async function publicKnowledgeFilterAgent (state : GraphState, config? : 
     query: query
   });
 
-  console.log(response.content);
+  console.log(response.validity);
 
-  if (response.content === 'VALID') {
+  if (response.validity === 'VALID_QUERY') {
     state.queryValidity = QueryValidity.VALID_QUERY;
-  } else if (response.content === 'INVALID') {
+  } else if (response.validity === 'INVALID_QUERY') {
     state.queryValidity = QueryValidity.INVALID_QUERY;
+    state.queryValidityReasoning = response.reasoning;
   } else {
     state.queryValidity = QueryValidity.QUERY_VALIDITY_ERROR;
+    state.queryValidityReasoning = response.reasoning;
   }
 
   return state;

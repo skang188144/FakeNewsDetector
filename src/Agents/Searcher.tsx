@@ -7,8 +7,10 @@ export async function searcherAgent (state : GraphState, config? : RunnableConfi
   const { query } = state;
   const searchTool = new TavilySearchResults({ maxResults: 10 }); // TODO: increase max limit once in production
   const searchResults = JSON.parse(await searchTool.invoke(query).then());
+  const articleURLs = searchResults.map((obj : any) => obj.url);
+  console.log(articleURLs);
 
-  state.querySearchResults = searchResults;
+  state.querySearchResults = articleURLs.join(' , ');
 
   return state;
 }

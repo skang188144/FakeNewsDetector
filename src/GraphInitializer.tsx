@@ -15,14 +15,17 @@ import { factCheckerAgent } from './Agents/FactChecker';
  * Interface for storing the graph's state
  */
 export interface GraphState {
-  llm: ChatOpenAI; 
-  query: string;
-  queryValidity: QueryValidity;
+  llm : ChatOpenAI; 
+  query : string;
+  queryValidity : QueryValidity;
   queryValidityReasoning : string;
   querySearchQuestion : string;
-  querySearchResults : any;
-  queryTruthfulness: QueryTruthfulness;
-  queryTruthfulnessReasoning : string
+  querySearchResults : string;
+  querySourcesTruthfulness : QueryTruthfulness;
+  querySourcesTruthfulnessRatio : string;
+  querySourcesTruthfulnessReasoning : string;
+  queryInternalTruthfulness : QueryTruthfulness;
+  queryInternalTruthfulnessReasoning : string;
 };
 
 /**
@@ -65,11 +68,11 @@ const graphState : StateGraphArgs<GraphState>['channels'] = {
     //   temperature: 0
     // })
   },
-  query: // null
-  {
-    value: (oldQuery : string, newQuery : string) => newQuery,
-    default: () => ""
-  },
+  query: null,
+  // {
+  //   value: (oldQuery : string, newQuery : string) => newQuery,
+  //   default: () => ""
+  // },
   queryValidity: null,
   queryValidityReasoning : null,
   // {
@@ -77,13 +80,16 @@ const graphState : StateGraphArgs<GraphState>['channels'] = {
   //   default: () => false
   // },
   querySearchQuestion : null,
-  querySearchResults: 
-  {
-    value: (oldQuerySearchResults : any, newQuerySearchResults : any) => newQuerySearchResults,
-    default: () => [{}]
-  },
-  queryTruthfulness: null,
-  queryTruthfulnessReasoning : null
+  querySearchResults: null,
+  // {
+  //   value: (oldQuerySearchResults : any, newQuerySearchResults : any) => newQuerySearchResults,
+  //   default: () => [{}]
+  // },
+  querySourcesTruthfulness: null,
+  querySourcesTruthfulnessRatio: null,
+  querySourcesTruthfulnessReasoning : null,
+  queryInternalTruthfulness: null,
+  queryInternalTruthfulnessReasoning: null
 };
 
 function createGraph() {
@@ -119,20 +125,11 @@ function createGraph() {
     questionifierAgent: 'questionifierAgent',
     end: END
   })
+  // .addEdge('questionifierAgent', END)
   .addEdge('questionifierAgent', 'searcherAgent')
+  // .addEdge('searcherAgent', END)
   .addEdge('searcherAgent', 'factCheckerAgent')
   .addEdge('factCheckerAgent', END)
-
-
-  // .addConditionalEdges('publicKnowledgeFilterAgent', publicKnowledgeFilterRouter, {
-  //   factCheckerAgent: 'factCheckerAgent',
-  //   end: END
-  // })
-  // .addConditionalEdges('factCheckerAgent', discardIfNotAFact, {
-  //   searcherAgent: 'searcherAgent',
-  //   end: END
-  // })
-  // .addEdge('searcherAgent', END)
   .compile();
 
   return graph;
@@ -151,10 +148,10 @@ async function main() {
     //   }],
     //   temperature: 0
     // }),
-    query: 'Is pizza made from dough, sauce, and cheese?'
+    query: 'OpenAI is run by QAnon cultists and deep-state pedophiles.'
   });
 
-  const result = await result1.then((r) => [r.query, r.queryValidity, r.queryIsAFact]);
+  const result = await result1.then((r) => [r.query, r.queryValidity, r.queryValidityReasoning, /*r.querySearchResults,*/ r.querySourcesTruthfulness, r.querySourcesTruthfulnessRatio, r.querySourcesTruthfulnessReasoning, r.queryInternalTruthfulness, r.queryInternalTruthfulnessReasoning]);
   console.log(result);
 }
 
