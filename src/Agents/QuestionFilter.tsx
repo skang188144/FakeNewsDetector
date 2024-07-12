@@ -1,12 +1,10 @@
 import { GraphState } from '../GraphInitializer.tsx'
 import { RunnableConfig } from '@langchain/core/runnables';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-
-// import.meta.env.OPENAI_API_KEY
+import { QueryValidity } from '../Utilities/StatusCodes.tsx';
 
 export async function questionFilterAgent (state : GraphState, config? : RunnableConfig) {
-  const llm = state.llm;
-  const query = state.query;
+  const { llm, query } = state;
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are an AI agent for a certain web application. Your job is to receive queries, and'
@@ -36,18 +34,20 @@ export async function questionFilterAgent (state : GraphState, config? : Runnabl
   console.log(response.content);
 
   if (response.content === 'VALID') {
-    state.queryValidity = true;
+    state.queryValidity = QueryValidity.VALID_QUERY;
   } else if (response.content === 'INVALID') {
-    state.queryValidity = false;
+    state.queryValidity = QueryValidity.INVALID_QUERY;
+  } else {
+    state.queryValidity = QueryValidity.QUERY_VALIDITY_ERROR;
   }
 
   return state;
 };
 
 export function questionFilterRouter(state : GraphState) {
-  const queryValidity = state.queryValidity;
+  const { queryValidity } = state;
 
-  if (queryValidity === true) {
+  if (queryValidity === QueryValidity.VALID_QUERY) {
     return 'opinionFilterAgent';
   } else {
     return 'end';

@@ -1,27 +1,33 @@
 import { GraphState } from '../GraphInitializer.tsx'
 import { RunnableConfig } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { QueryTruthfulness } from '../Utilities/StatusCodes.tsx';
 
 export async function factCheckerAgent (state : GraphState, config? : RunnableConfig) {
-  const llm = state.llm;
-  const query = state.query;
+  const { llm, query, querySearchResults } = state;
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are a fact checker for a misinformation detector application. Your sole job is to '
-             + 'determine if the query you receive is true or false.\n'
+             + 'determine if the query you receive is true or false. You will be given a list of sources '
+             + 'from the Internet to parse through. You must extract the core points from each source, '
+             + 'and determine if each source points to the initial query being true or false. In your '
+             + 'final output, you must include how many sources pointed to your conclusion, and how '
+             + 'many did not agree. In a separate section, include your own determination of whether the '
+             + 'query is true or false, based solely on the knowledge that you have, and without the '
+             + 'list of sources that was initially provided to you.\n'
     ],
-    ['user', 'Your role is being a fact checker for a misinformation detector application. Your task '
-           + 'is to take a certain statement as input, and determine if that statement is a fact or '
-           + 'not.\n'
-           
-           + 'A statement is a fact if it is provably true. Opinions are not facts. All other statements '
-           + 'are considered to be not a fact.\n'
-
-           + 'Here is the statement:\n'
+    ['user', 'Here is the query:\n'
            + '{query}\n'
 
-           + 'Please return nothing but a single string of the word FACT in all uppercase if the '
-           + 'statement is a fact, and NOT_A_FACT if the statement is not a fact.'
+           + 'Like mentioned in your system prompt, you must include two sections in your response. The '
+           + 'first section must include three things: the string TRUE_QUERY or FALSE_QUERY depending on '
+           + 'your determination based solely on the sources; a fraction in the form of x/y representing '
+           + 'the number of sources that agreed with your determination, out of the total number of sources; '
+           + 'and finally a short paragraph summarizing why the sources that agreed with you, did so.\n'
+
+           + 'The second section must include two things: the string TRUE_QUERY or FALSE_QUERY depending on '
+           + 'your determination based solely on your own knowledge, excluding the previous sources; and '
+           + 'finally a short paragraph summarizing why your determination is so.'
     ]
   ]);
 
@@ -31,19 +37,23 @@ export async function factCheckerAgent (state : GraphState, config? : RunnableCo
     query: query
   });
 
-  if (response.content === 'FACT') {
-    state.queryIsAFact = true;
-  } else if (response.content === 'NOT_A_FACT') {
-    state.queryIsAFact = false;
+  console.log(response.content);
+
+  if (response.content.toString().includes('TRUE_QUERY')) {
+    state.queryTruthfulness = QueryTruthfulness.TRUE_QUERY;
+  } else if (response.content.toString().includes('FALSE_QUERY')) {
+    state.queryTruthfulness = QueryTruthfulness.FALSE_QUERY
+  } else {
+    state.queryTruthfulness = QueryTruthfulness.QUERY_TRUTHFULNESS_ERROR;
   }
 
   return state;
 }
 
-export function discardIfNotAFact(state : GraphState) {
-  const queryIsAFact = state.queryIsAFact;
+export function factCheckerRouter(state : GraphState) {
+  const { queryTruthfulness } = state;
 
-  if (queryIsAFact === true) {
+  if (queryTruthfulness === QueryTruthfulness.TRUE_QUERY) {
     return 'searcherAgent';
   } else {
     return 'end';
