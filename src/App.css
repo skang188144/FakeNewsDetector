@@ -1,42 +1,87 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.App {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.SourcesColumn {
+  height: inherit;
+  width: 34vw;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.SourcesColumnHeader {
+  margin-left: auto;
+  margin-right: 0.6vw;
+  font-family: "Mosk Ultra-Bold 900";
+  font-weight: 900;
+  font-size: 7vw;
+  line-height: 1.1;
+  letter-spacing: -0.3vw;
+  color: #11151C;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.MainColumn {
+  height: inherit;
+  width: 66vw;
+  background-color: #11151C;
+  display: flex;
+  flex-direction: column;
 }
 
-.card {
-  padding: 2em;
+.MainColumnHeader {
+  margin-left: 0.6vw;
+  margin-right: auto;
+  font-family: "Mosk Ultra-Bold 900";
+  font-weight: 900;
+  font-size: 7vw;
+  line-height: 1.1;
+  letter-spacing: -0.3vw;
+  color: white;
 }
 
-.read-the-docs {
-  color: #888;
+.MainColumnByline {
+  margin-left: 0.6vw;
+  margin-right: auto;
+  font-family: 'Mosk Medium 500';
+  font-size: 1.75vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
+  color: white;
 }
+
+@font-face {
+  font-family: 'SF UI Text';
+  src: url("https://d33wubrfki0l68.cloudfront.net/7f5efbefa73e3ee486c502b66fb9200e108ad047/cbb2f/fonts/sf-ui-text-heavy.woff") format('woff');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: 'Mosk Ultra-Bold 900';
+  src: url('../fonts/Mosk\ Ultra-Bold\ 900.ttf')
+}
+
+@font-face {
+  font-family: 'Mosk Medium 500';
+  src: url('../fonts/Mosk\ Medium\ 500.ttf')
+}
+
+/* .App {
+  height: 60vh;
+  width: 80vw;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: url('../public/Gray Gradient.jpeg');
+  background-size: cover;
+  background-color: black;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+} */

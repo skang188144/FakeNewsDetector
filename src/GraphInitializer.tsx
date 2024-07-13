@@ -1,15 +1,15 @@
 import 'dotenv/config';
 import { END, START, StateGraph, StateGraphArgs } from '@langchain/langgraph'
 import { ChatOpenAI } from '@langchain/openai';
-import { QueryValidity, QueryTruthfulness } from './Utilities/StatusCodes'
-import { grammaticalFilterAgent, grammaticalFilterRouter } from './Agents/GrammaticalFilter';
-import { propositionFilterAgent, propositionFilterRouter } from './Agents/PropositionFilter';
-import { questionFilterAgent, questionFilterRouter } from './Agents/QuestionFilter';
-import { opinionFilterAgent, opinionFilterRouter } from './Agents/OpinionFilter';
-import { publicKnowledgeFilterAgent, publicKnowledgeFilterRouter } from './Agents/PublicKnowledgeFilter';
-import { questionifierAgent } from './Agents/Questionifier';
-import { searcherAgent } from './Agents/Searcher';
-import { factCheckerAgent } from './Agents/FactChecker';
+import { QueryValidity, QueryTruthfulness } from './utilities/StatusCodes'
+import { grammaticalFilterAgent, grammaticalFilterRouter } from './agents/GrammaticalFilter';
+import { propositionFilterAgent, propositionFilterRouter } from './agents/PropositionFilter';
+import { questionFilterAgent, questionFilterRouter } from './agents/QuestionFilter';
+import { opinionFilterAgent, opinionFilterRouter } from './agents/OpinionFilter';
+import { publicKnowledgeFilterAgent, publicKnowledgeFilterRouter } from './agents/PublicKnowledgeFilter';
+import { questionifierAgent } from './agents/Questionifier';
+import { searcherAgent } from './agents/Searcher';
+import { factCheckerAgent } from './agents/FactChecker';
 
 /**
  * Interface for storing the graph's state

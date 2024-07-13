@@ -1,8 +1,8 @@
 import { GraphState } from '../GraphInitializer.tsx';
 import { RunnableConfig } from '@langchain/core/runnables';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { QueryValidity } from '../Utilities/StatusCodes.tsx';
-import { queryValidityOutputStructure } from '../Utilities/OutputStructures.tsx';
+import { QueryValidity } from '../utilities/StatusCodes.tsx';
+import { queryValidityOutputStructure } from '../utilities/OutputStructures.tsx';
 
 export async function grammaticalFilterAgent (state : GraphState, config? : RunnableConfig) {
   const { query } = state;

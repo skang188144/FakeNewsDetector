@@ -1,8 +1,8 @@
 import { GraphState } from '../GraphInitializer.tsx'
 import { RunnableConfig } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { QueryTruthfulness } from '../Utilities/StatusCodes.tsx';
-import { queryTruthfulnessOutputStructure } from '../Utilities/OutputStructures.tsx';
+import { QueryTruthfulness } from '../utilities/StatusCodes.tsx';
+import { queryTruthfulnessOutputStructure } from '../utilities/OutputStructures.tsx';
 
 export async function factCheckerAgent (state : GraphState, config? : RunnableConfig) {
   const { query, querySearchResults } = state;
