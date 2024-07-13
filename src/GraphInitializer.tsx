@@ -41,8 +41,7 @@ export interface GraphState {
  */
 
 const graphState : StateGraphArgs<GraphState>['channels'] = {
-  llm: // null
-  {
+  llm: {
     value: () => new ChatOpenAI({
       modelName: 'gpt-4o',
       temperature: 0
@@ -51,40 +50,12 @@ const graphState : StateGraphArgs<GraphState>['channels'] = {
       modelName: 'gpt-4o',
       temperature: 0
     })
-    // value: () =>  new ChatGoogleGenerativeAI({
-    //   modelName: 'gemini-pro',
-    //   safetySettings: [{
-    //     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-    //     threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-    //   }],
-    //   temperature: 0
-    // }),
-    // default: () => new ChatGoogleGenerativeAI({
-    //   modelName: 'gemini-pro',
-    //   safetySettings: [{
-    //     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-    //     threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-    //   }],
-    //   temperature: 0
-    // })
   },
   query: null,
-  // {
-  //   value: (oldQuery : string, newQuery : string) => newQuery,
-  //   default: () => ""
-  // },
   queryValidity: null,
   queryValidityReasoning : null,
-  // {
-  //   value: (oldQueryValidity : boolean, newQueryValidity : boolean) => newQueryValidity,
-  //   default: () => false
-  // },
   querySearchQuestion : null,
   querySearchResults: null,
-  // {
-  //   value: (oldQuerySearchResults : any, newQuerySearchResults : any) => newQuerySearchResults,
-  //   default: () => [{}]
-  // },
   querySourcesTruthfulness: null,
   querySourcesTruthfulnessRatio: null,
   querySourcesTruthfulnessReasoning : null,
@@ -140,15 +111,7 @@ async function main() {
     llm: new ChatOpenAI({
       modelName: 'gpt-4o'
     }),
-    // new ChatGoogleGenerativeAI({
-    //   modelName: 'gemini-pro',
-    //   safetySettings: [{
-    //     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-    //     threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-    //   }],
-    //   temperature: 0
-    // }),
-    query: 'OpenAI is run by QAnon cultists and deep-state pedophiles.'
+    query: 'Pizza is made from dough, sauce, and cheese.'
   });
 
   const result = await result1.then((r) => [r.query, r.queryValidity, r.queryValidityReasoning, /*r.querySearchResults,*/ r.querySourcesTruthfulness, r.querySourcesTruthfulnessRatio, r.querySourcesTruthfulnessReasoning, r.queryInternalTruthfulness, r.queryInternalTruthfulnessReasoning]);
