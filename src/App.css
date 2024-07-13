@@ -1,3 +1,8 @@
+@import './index.css';
+
+/*
+ * App Container
+ */
 .App {
   height: 100vh;
   width: 100vw;
@@ -5,71 +10,102 @@
   flex-direction: row;
 }
 
+/*
+ * Sources Column
+ */
 .SourcesColumn {
-  height: inherit;
   width: 34vw;
+  color: #11151C;
   background-color: white;
   display: flex;
   flex-direction: column;
   overflow: scroll;
 }
 
-.SourcesColumnHeader {
+.SourcesColumnPageTitle {
   margin-left: auto;
   margin-right: 0.6vw;
-  font-family: "Mosk Ultra-Bold 900";
-  font-weight: 900;
+  font-family: 'Mosk Ultra-Bold 900';
   font-size: 7vw;
+  font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.3vw;
-  color: #11151C;
 }
 
+.SourcesColumnSpacer {
+  height: 7vh;
+  width: 1px;
+  background-color: transparent;
+}
+
+.SourcesColumnHeader {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Mosk Ultra-Bold 900';
+  font-size: 5vw;
+  line-height: 1.1;
+  letter-spacing: -0.3vw;
+}
+
+/*
+ * Main Column
+ */
 .MainColumn {
-  height: inherit;
   width: 66vw;
+  color: white;
   background-color: #11151C;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 }
 
-.MainColumnHeader {
+.MainColumnPageTitle {
   margin-left: 0.6vw;
   margin-right: auto;
-  font-family: "Mosk Ultra-Bold 900";
-  font-weight: 900;
+  font-family: 'Mosk Ultra-Bold 900';
   font-size: 7vw;
+  font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.3vw;
-  color: white;
 }
 
 .MainColumnByline {
+  height: 7vh;
   margin-left: 0.6vw;
   margin-right: auto;
+  color: white;
   font-family: 'Mosk Medium 500';
   font-size: 1.75vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
-  color: white;
 }
 
-@font-face {
-  font-family: 'SF UI Text';
-  src: url("https://d33wubrfki0l68.cloudfront.net/7f5efbefa73e3ee486c502b66fb9200e108ad047/cbb2f/fonts/sf-ui-text-heavy.woff") format('woff');
-  font-display: swap;
-  font-style: normal;
-  font-weight: 900;
-}
-
-@font-face {
+.MainColumnHeader {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2.5vh;
   font-family: 'Mosk Ultra-Bold 900';
-  src: url('../fonts/Mosk\ Ultra-Bold\ 900.ttf')
+  font-size: 5vw;
+  line-height: 1.1;
+  letter-spacing: -0.3vw;
 }
 
-@font-face {
+.MainColumnInput {
+  width: 56vw;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid;
+  border-radius: 100px;
+  border-color: white;
+  color: white;
+  background-color: #11151C;
   font-family: 'Mosk Medium 500';
-  src: url('../fonts/Mosk\ Medium\ 500.ttf')
+  font-size: 1.75vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
 }
 
 /* .App {

@@ -2,3 +2,16 @@
   margin: 0;
   padding: 0;
 }
+
+/*
+ * Fonts
+ */
+ @font-face {
+  font-family: 'Mosk Ultra-Bold 900';
+  src: url('../fonts/Mosk\ Ultra-Bold\ 900.ttf')
+}
+
+@font-face {
+  font-family: 'Mosk Medium 500';
+  src: url('../fonts/Mosk\ Medium\ 500.ttf')
+}
