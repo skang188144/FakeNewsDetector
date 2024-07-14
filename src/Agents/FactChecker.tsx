@@ -1,4 +1,4 @@
-import { GraphState } from '../GraphInitializer.tsx'
+import GraphState from '../utilities/GraphState.tsx';
 import { RunnableConfig } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { QueryTruthfulness } from '../utilities/StatusCodes.tsx';

@@ -1,6 +1,23 @@
 import './App.css'
+import { useEffect, useState } from 'react';
+import FakeNewsDetector from './FakeNewsDetector';
+import { QueryState } from './utilities/StatusCodes';
 
-function App() {
+const App = () => {
+  const [queryState, setQueryState] = useState(QueryState.READY_TO_RECEIVE);
+  const [input, setInput] = useState('');
+
+  const fakeNewsDetector = new FakeNewsDetector('gpt-4o');
+  const graph = fakeNewsDetector.getGraph();
+
+  const onEnter = (event : React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && queryState === QueryState.READY_TO_RECEIVE) {
+      fakeNewsDetector.runQuery(input);
+      console.log('ENTER');
+    } else if (event.key === 'Enter' && queryState !== QueryState.READY_TO_RECEIVE) {
+      // TODO: Add error message
+    }
+  }
 
   return (
     <div className='App'>
@@ -29,10 +46,10 @@ function App() {
           Query
         </div>
 
-        <input className='MainColumnInput' placeholder='Enter a statement to fact check.'/>
+        <input className='MainColumnInput' placeholder='Enter a statement to check.' onChange={ (event) => {setInput(event.target.value)} } onKeyDown={ onEnter }/>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

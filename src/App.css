@@ -33,7 +33,7 @@
 }
 
 .SourcesColumnSpacer {
-  height: 7vh;
+  height: 10vh;
   width: 1px;
   background-color: transparent;
 }
@@ -70,12 +70,12 @@
 }
 
 .MainColumnByline {
-  height: 7vh;
+  height: 10vh;
   margin-left: 0.6vw;
   margin-right: auto;
   color: white;
   font-family: 'Mosk Medium 500';
-  font-size: 1.75vw;
+  font-size: 1.5vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
 }
@@ -94,9 +94,9 @@
   width: 56vw;
   margin-left: auto;
   margin-right: auto;
-  padding: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 0.75vw;
+  padding-left: 1.5vw;
+  padding-right: 1.5vw;
   border: 1px solid;
   border-radius: 100px;
   border-color: white;
