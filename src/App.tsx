@@ -7,8 +7,12 @@ const App = () => {
   const [queryState, setQueryState] = useState(QueryState.READY_TO_RECEIVE);
   const [input, setInput] = useState('');
 
-  const fakeNewsDetector = new FakeNewsDetector('gpt-4o');
+  const fakeNewsDetector = new FakeNewsDetector('gpt-4o', setQueryState);
   const graph = fakeNewsDetector.getGraph();
+
+  useEffect(() => {
+    console.log(queryState);
+  }, [queryState]);
 
   const onEnter = (event : React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && queryState === QueryState.READY_TO_RECEIVE) {

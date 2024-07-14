@@ -10,19 +10,12 @@ import { questionifierAgent } from './agents/Questionifier';
 import { searcherAgent } from './agents/Searcher';
 import { factCheckerAgent } from './agents/FactChecker';
 import { QueryState } from './utilities/StatusCodes';
-import { Dispatch, SetStateAction } from 'react';
 
-export default class FakeNewsDetector {
-  private chatGPTModelName;
-  private graph;
-  public static setComponentQueryState: Dispatch<SetStateAction<QueryState>>;
-
-  public constructor(chatGPTModelName : string, setQueryState: Dispatch<SetStateAction<QueryState>>) {
-    this.chatGPTModelName = chatGPTModelName;
-    this.graph = this.createGraph();
-    FakeNewsDetector.setComponentQueryState = setQueryState;
-  }
-  
+const ExperimentalComponent = () => {
+  const chatGPTModelName = 'gpt-4o';
+  const memorySaver = new MemorySaver();
+  let queryState = QueryState.READY_TO_RECEIVE;
+    
   /**
    * A reducer will:
    * - keep track of the current state
@@ -35,7 +28,7 @@ export default class FakeNewsDetector {
    * Initialize the graph state
    */
 
-  private graphState : StateGraphArgs<GraphState>['channels'] = {
+  const graphState : StateGraphArgs<GraphState>['channels'] = {
     llm: {
       value: () => new ChatOpenAI({
         apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -60,10 +53,10 @@ export default class FakeNewsDetector {
     queryInternalTruthfulnessReasoning: null,
     changeQueryState: null
   };
-
-  private createGraph() {
+  
+  const createGraph = () => {
     const graph = new StateGraph<GraphState>({
-      channels: this.graphState
+      channels: graphState
     })
     .addNode('grammaticalFilterAgent', grammaticalFilterAgent)
     .addNode('propositionFilterAgent', propositionFilterAgent)
@@ -99,44 +92,28 @@ export default class FakeNewsDetector {
     // .addEdge('searcherAgent', END)
     .addEdge('searcherAgent', 'factCheckerAgent')
     .addEdge('factCheckerAgent', END)
-    .compile();
-
+    .compile({ checkpointer: memorySaver });
+  
     return graph;
   }
 
-  public setQueryState(queryState : QueryState) {
-    FakeNewsDetector.setComponentQueryState(queryState);
+  const graph = createGraph();
+  
+  const changeQueryState = (state : QueryState) => {
+    queryState = state;
   }
-
-  public getGraph() {
-    return this.graph;
-  }
-
-  public runQuery(query: string) {
-    return this.graph.invoke({
+  
+  const runQuery = (query: string) => {
+    return graph.invoke({
       llm: new ChatOpenAI({
         apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-        modelName: this.chatGPTModelName,
+        modelName: chatGPTModelName,
         temperature: 0
       }), 
       query: query,
-      changeQueryState: this.setQueryState
-    }).then();
+      changeQueryState: changeQueryState
+    }, { configurable: { thread_id: query } }).then();
   }
 }
 
-
-
-// async function main() {
-//   const result1 = createGraph().invoke({ 
-//     llm: new ChatOpenAI({
-//       modelName: 'gpt-4o'
-//     }),
-//     query: 'Pizza is made from dough, sauce, and cheese.'
-//   });
-
-//   const result = await result1.then((r) => [r.query, r.queryValidity, r.queryValidityReasoning, /*r.querySearchResults,*/ r.querySourcesTruthfulness, r.querySourcesTruthfulnessRatio, r.querySourcesTruthfulnessReasoning, r.queryInternalTruthfulness, r.queryInternalTruthfulnessReasoning]);
-//   console.log(result);
-// }
-
-// main();
+export default ExperimentalComponent;
