@@ -121,7 +121,7 @@ export default class FakeNewsDetector {
       }), 
       query: query,
       setQueryState: this.setQueryState
-    }).then();
+    });
   }
 }
 

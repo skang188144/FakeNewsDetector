@@ -1,13 +1,29 @@
 @import './index.css';
+@import url("https://use.typekit.net/hup5afq.css");
 
-/*
- * App Container
- */
 .App {
   height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
+}
+
+.LeftColumn {
+  height: inherit;
+  width: 34vw;
+  left: 0;
+  color: #11151C;
+  background-color: white;
+  position: absolute;
+}
+
+.RightColumn {
+  height: inherit;
+  width: 66vw;
+  right: 0;
+  color: white;
+  background-color: #11151C;
+  position: absolute;
 }
 
 .TitleContainer {
@@ -49,7 +65,7 @@
 
 .TitleEndingContainer .Byline {
   margin-right: auto;
-  color: white;
+  color: rgb(157, 157, 157);
   font-family: 'Mosk Medium 500';
   font-size: 1.5vw;
   line-height: 1.1;
@@ -67,7 +83,7 @@
   background-color: #242d3b;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .QueryInput {
@@ -116,8 +132,9 @@
   margin-right: auto;
   margin-bottom: auto;
   color: gray;
-  font-family: 'Mosk Medium 500';
-  font-size: 2vw;
+  font-family: "space-mono", mono;
+  font-weight: 400;
+  font-style: normal;  font-size: 2vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
 }
@@ -190,190 +207,165 @@ a {
   color: gray;
 }
 
-/*
- * Sources Column
- */
-.SourcesColumn {
+.ResultsDisplay {
   height: inherit;
-  width: 34vw;
-  left: 0;
-  color: #11151C;
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+.ResultsDisplay .ResultsHeader {
+  width: inherit;
+  display: flex;
+  flex-direction: row;
+}
+
+.ResultsHeader .Bar {
+  height: inherit;
+  width: 1vw;
+  margin-right: 1vw;
   background-color: white;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  overflow: scroll;
 }
 
-.SourcesColumnPageTitle {
-  margin-left: auto;
-  margin-right: 0.6vw;
-  font-family: 'Mosk Ultra-Bold 900';
-  font-size: 7vw;
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.3vw;
-}
-
-.SourcesColumnSpacer {
-  height: 10vh;
-  width: 1px;
-  background-color: transparent;
-}
-
-.SourcesColumnHeader {
-  margin-left: auto;
-  margin-right: auto;
-  font-family: 'Mosk Ultra-Bold 900';
-  font-size: 5vw;
-  line-height: 1.1;
-  letter-spacing: -0.3vw;
-}
-
-/*
- * Main Column
- */
-.MainColumn {
-  height: inherit;
-  width: 66vw;
-  right: 0;
+.ResultsHeader .Query {
+  width: 45vw;
   color: white;
-  background-color: #11151C;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  overflow: scroll;
-}
-
-.MainColumnPageTitle {
-  margin-left: 0.6vw;
-  margin-right: auto;
   font-family: 'Mosk Ultra-Bold 900';
-  font-size: 7vw;
-  font-weight: 900;
+  font-size: 4vw;
   line-height: 1.1;
-  letter-spacing: -0.3vw;
+  letter-spacing: -0.05vw;
 }
 
-.MainColumnByline {
-  height: 10vh;
-  margin-left: 0.6vw;
+.ResultsDisplay .SourcesHeader {
+  margin-top: 7vh;
   margin-right: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.SourcesHeader .Dot {
+  margin-right: 0.5vw;
   color: white;
-  font-family: 'Mosk Medium 500';
+  font-family: "space-mono", mono;
+  font-weight: 400;
+  font-style: normal;
   font-size: 1.5vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
 }
 
-.MainColumnHeader {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 2.5vh;
+.SourcesHeader .Text {
+  color: white;
+  font-family: "space-mono", mono;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
+}
+
+.ResultsDisplay .SourcesResult {
+  display: flex;
+  flex-direction: row;
+}
+
+.SourcesResult .Bar {
+  height: inherit;
+  width: 1vw;
+  margin-right: 1vw;
+  background-color: #70AE6E;
+}
+
+.SourcesResult .Result {
   font-family: 'Mosk Ultra-Bold 900';
-  font-size: 5vw;
-  line-height: 1.1;
-  letter-spacing: -0.3vw;
-}
-
-.MainColumnInput {
-  width: 56vw;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0.75vw;
-  padding-left: 1.5vw;
-  padding-right: 1.5vw;
-  border: 1px solid;
-  border-radius: 100px;
-  border-color: white;
-  color: white;
-  background-color: #11151C;
-  font-family: 'Mosk Medium 500';
-  font-size: 1.75vw;
+  font-size: 3vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
 }
 
-.MainColumnOutputContainer {
-  height: fit-content;
-  width: 56vw;
-  margin: auto;
-  border-radius: 10px;
-  background-color: #242d3b;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-}
-
-.MainColumnOutputContainer .READY_TO_RECEIVE {
-  height: 40vh;
-  width: 56vw;
+.SourcesResult .RatioBeginning {
   margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-/* .READY_TO_RECEIVE .AppTitleText {
-  margin-left: auto;
-  margin-right: auto;
+  margin-right: 0.75vw;
   margin-top: auto;
-  color: white;
+  margin-bottom: auto;
   font-family: 'Mosk Medium 500';
   font-size: 3vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
 }
 
-.READY_TO_RECEIVE .AppVersionText {
-  margin-left: auto;
-  margin-right: auto;
+.SourcesResult .RatioEnding {
+  margin-top: auto;
   margin-bottom: auto;
-  color: gray;
+  text-align: center;
   font-family: 'Mosk Medium 500';
-  font-size: 2vw;
+  font-size: 1.25vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
-} */
+}
 
-.MainColumnOutputContainer .LOADING_VALIDITY_CHECKING {
-  height: 40vh;
-  width: 56vw;
-  margin-left: auto;
+.ResultsDisplay .SourcesReasoning {
+  margin-top: 3vh;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: 'Mosk Light 300';
+  font-size: 1.5vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
+}
+
+.ResultsDisplay .InternalHeader {
+  margin-top: 7vh;
   margin-right: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
-.LOADING_VALIDITY_CHECKING .LoadingSpinner {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
+.InternalHeader .Dot {
+  margin-right: 0.5vw;
   color: white;
-  size: 50;
+  font-family: "space-mono", mono;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
 }
 
-.LOADING_VALIDITY_CHECKING .LoadingStage {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: auto;
+.InternalHeader .Text {
   color: white;
-  font-family: 'Mosk Medium 500';
+  font-family: "space-mono", mono;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
+}
+
+.ResultsDisplay .InternalResult {
+  display: flex;
+  flex-direction: row;
+}
+
+.InternalResult .Bar {
+  height: inherit;
+  width: 1vw;
+  margin-right: 1vw;
+  background-color: #70AE6E;
+}
+
+.InternalResult .Result {
+  font-family: 'Mosk Ultra-Bold 900';
   font-size: 3vw;
   line-height: 1.1;
   letter-spacing: -0.05vw;
 }
 
-/* .App {
-  height: 60vh;
-  width: 80vw;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: auto;
-  margin-right: auto;
-  background-image: url('../public/Gray Gradient.jpeg');
-  background-size: cover;
-  background-color: black;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-} */
+.ResultsDisplay .InternalReasoning {
+  margin-top: 3vh;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: 'Mosk Light 300';
+  font-size: 1.5vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
+}
