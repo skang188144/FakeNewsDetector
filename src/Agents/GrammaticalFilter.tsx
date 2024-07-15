@@ -3,13 +3,12 @@ import { RunnableConfig } from '@langchain/core/runnables';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { QueryState, QueryValidity } from '../utilities/StatusCodes.tsx';
 import { queryValidityOutputStructure } from '../utilities/OutputStructures.tsx';
-import FakeNewsDetector from '../FakeNewsDetector.tsx';
 
 export async function grammaticalFilterAgent (state : GraphState, config? : RunnableConfig) {
-  const { query, changeQueryState } = state;
+  const { query, setQueryState } = state;
   const llm = state.llm.withStructuredOutput(queryValidityOutputStructure);
 
-  changeQueryState(QueryState.LOADING_VALIDITY_CHECKING);
+  setQueryState(QueryState.LOADING_VALIDITY_CHECKING);
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are an AI agent for a certain web application. Your job is to receive queries, and'
@@ -51,11 +50,12 @@ export async function grammaticalFilterAgent (state : GraphState, config? : Runn
 };
 
 export function grammaticalFilterRouter(state : GraphState) {
-  const { queryValidity } = state;
+  const { queryValidity, setQueryState } = state;
 
   if (queryValidity === QueryValidity.VALID_QUERY) {
     return 'propositionFilterAgent';
   } else {
+    setQueryState(QueryState.ERROR_VALIDITY);
     return 'end';
   }
 };

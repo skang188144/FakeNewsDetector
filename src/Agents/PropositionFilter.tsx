@@ -1,7 +1,7 @@
 import GraphState from '../utilities/GraphState.tsx';
 import { RunnableConfig } from '@langchain/core/runnables';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { QueryValidity } from '../utilities/StatusCodes.tsx';
+import { QueryState, QueryValidity } from '../utilities/StatusCodes.tsx';
 import { queryValidityOutputStructure } from '../utilities/OutputStructures.tsx';
 
 export async function propositionFilterAgent (state : GraphState, config? : RunnableConfig) {
@@ -48,11 +48,12 @@ export async function propositionFilterAgent (state : GraphState, config? : Runn
 };
 
 export function propositionFilterRouter(state : GraphState) {
-  const { queryValidity } = state;
+  const { queryValidity, setQueryState } = state;
 
   if (queryValidity === QueryValidity.VALID_QUERY) {
     return 'questionFilterAgent';
   } else {
+    setQueryState(QueryState.ERROR_VALIDITY);
     return 'end';
   }
 };

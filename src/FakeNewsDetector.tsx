@@ -58,7 +58,7 @@ export default class FakeNewsDetector {
     querySourcesTruthfulnessReasoning : null,
     queryInternalTruthfulness: null,
     queryInternalTruthfulnessReasoning: null,
-    changeQueryState: null
+    setQueryState: null
   };
 
   private createGraph() {
@@ -120,7 +120,7 @@ export default class FakeNewsDetector {
         temperature: 0
       }), 
       query: query,
-      changeQueryState: this.setQueryState
+      setQueryState: this.setQueryState
     }).then();
   }
 }

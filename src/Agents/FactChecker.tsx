@@ -1,12 +1,14 @@
 import GraphState from '../utilities/GraphState.tsx';
 import { RunnableConfig } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { QueryTruthfulness } from '../utilities/StatusCodes.tsx';
+import { QueryState, QueryTruthfulness } from '../utilities/StatusCodes.tsx';
 import { queryTruthfulnessOutputStructure } from '../utilities/OutputStructures.tsx';
 
 export async function factCheckerAgent (state : GraphState, config? : RunnableConfig) {
-  const { query, querySearchResults } = state;
+  const { query, querySearchResults, setQueryState } = state;
   const llm = state.llm.withStructuredOutput(queryTruthfulnessOutputStructure);
+
+  setQueryState(QueryState.LOADING_FACT_CHECKING);
 
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are a fact checker for a misinformation detector application. Your sole job is to '
@@ -54,6 +56,8 @@ export async function factCheckerAgent (state : GraphState, config? : RunnableCo
   state.querySourcesTruthfulnessRatio = response.sourcesRatio;
   state.querySourcesTruthfulnessReasoning = response.sourcesReasoning;
   state.queryInternalTruthfulnessReasoning = response.internalReasoning;
+
+  setQueryState(QueryState.QUERY_COMPLETE);
 
   return state;
 }
