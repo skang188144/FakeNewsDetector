@@ -55,7 +55,7 @@ This application is designed with a series of specialized agents nodes within a 
 Despite the challenges and tight deadlines, this project has been a valuable learning experience, allowing me to hone my skills in AI, web development, and project management. Whether or not I get the position at Tavily, I believe this project can stand on its own as a testament to my growth and capability.
 
 ## Usage
-You can use FakeNewsDetector at https://www.skang188144.github.io/FakeNewsDetector/
+You can use FakeNewsDetector at https://skang188144.github.io/FakeNewsDetector/
 
 To build the project on your own,
 1. Install Node.js
