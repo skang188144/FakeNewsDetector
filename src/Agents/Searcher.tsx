@@ -11,7 +11,7 @@ export async function searcherAgent (state : GraphState) {
   // Update the App React component on what stage the graph is in
   setQueryState(QueryState.LOADING_SOURCES_SEARCHING);
 
-  const searchTool = new TavilySearchResults({ apiKey: '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', maxResults: 10 }); // TODO: increase max limit once in production
+  const searchTool = new TavilySearchResults({ apiKey: import.meta.env.VITE_TAVILY_API_KEY, maxResults: 10 }); // TODO: increase max limit once in production
   const searchResults = JSON.parse(await searchTool.invoke(query).then());
   state.querySearchResults = searchResults;
 
