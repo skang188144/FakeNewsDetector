@@ -1,7 +1,7 @@
 import './App.css'
 import { SetStateAction, useEffect, useState } from 'react';
-import FakeNewsDetector from './FakeNewsDetector';
 import { QueryState, QueryTruthfulness } from './utilities/StatusCodes';
+import FakeNewsDetector from './FakeNewsDetector';
 import { HashLoader, RingLoader } from 'react-spinners';
 import { JSX } from 'react/jsx-runtime';
 
