@@ -29,9 +29,7 @@
 - [Contact](#contact)
 
 ## Video Summary
-<video>
-	<source src="/Project Description.mp4" type="video/mp4"/>
-</video>
+[![Video Summary](http://img.youtube.com/vi/jbBTeJi7UOM/0.jpg)](http://www.youtube.com/watch?v=jbBTeJi7UOM "FakeNewsDetector Project Description")
 
 ## Overview
 FakeNewsDetector is a fact checker web application designed to determine if a given claim is true or false. This application leverages Retrieval-Augmented Generation to supplement existing large language models with sources from the Internet, allowing these models to make better decisions on whether a statement is true or false, based on what the majority of the sources conclude.
