@@ -238,6 +238,39 @@
 }
 
 /*
+ * Unknown Error Display
+ */
+.UnknownErrorDisplay {
+  height: 40vh;
+  width: 56vw;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.UnknownErrorDisplay .Error {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  color: white;
+  font-family: 'Mosk Medium 500';
+  font-size: 3vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
+}
+
+.UnknownErrorDisplay .ErrorDetails {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+  color: gray;
+  font-family: 'Mosk Medium 500';
+  font-size: 1.5vw;
+  line-height: 1.1;
+  letter-spacing: -0.05vw;
+}
+
+/*
  * Results Display
  */
 .OutputDisplay .ResultsHeaderDisplay {

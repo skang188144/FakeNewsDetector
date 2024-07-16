@@ -125,14 +125,20 @@ export default class FakeNewsDetector {
    * Run the query through the graph
    */
   public runQuery(query: string) {
-    return this.graph.invoke({
-      llm: new ChatOpenAI({
-        apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-        modelName: this.chatGPTModelName,
-        temperature: 0
-      }), 
-      query: query,
-      setQueryState: this.setQueryState
-    });
+    try {
+      return this.graph.invoke({
+        llm: new ChatOpenAI({
+          apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+          modelName: this.chatGPTModelName,
+          temperature: 0
+        }), 
+        query: query,
+        setQueryState: this.setQueryState
+      });
+    } catch (exception) {
+      console.log(exception);
+      this.setQueryState(QueryState.ERROR_OTHER);
+      return {};
+    }
   }
 }

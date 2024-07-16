@@ -9,18 +9,31 @@ const App = () => {
   /*
    * State
    */
+
+  // User Query / Input
   const [input, setInput] = useState('');
+
+  // Center Container JSX Elements
   const [outputDisplay, setOutputDisplay] = useState([<></>]);
+
+  // Graph Query Stage
   const [queryState, setQueryState] = useState(QueryState.READY_TO_RECEIVE);
+
+  // Graph Results
   const [queryResults, setQueryResults] = useState({});
+
+  // Sources List JSX Elements && Toggle State
   const [sourcesList, setSourcesList] = useState(<></>);
   const [isSourcesListVisible, setSourcesListVisbility] = useState(false);
 
+  // Graph Initializer / Object
   const fakeNewsDetector = new FakeNewsDetector('gpt-4o', setQueryState);
 
   /*
    * OutputDisplay Children
    */
+
+  // The initial center container elements, displaying a search bar, spinner animation, and app title / version
   const versionDisplay =
     <div className='VersionDisplay'>
       <RingLoader className='RingLoader' color='white' loading={ true } size={'5vw'}/>
@@ -36,6 +49,7 @@ const App = () => {
       </div>
     </div>;
 
+  // The loading screen center container elements, displaying a spinner, and the graph stages
   const loadingDisplay =
     <div className='LoadingDisplay'>
       <HashLoader className='HashLoader' color='white' loading={ true }/>
@@ -49,6 +63,7 @@ const App = () => {
       </div>
     </div>;
 
+  // Screen to go to when exiting from the loading screen with an error
   const validityErrorDisplay =
     <div className='ValidityErrorDisplay'>
       <div className='Error'>
@@ -59,10 +74,27 @@ const App = () => {
         Your query was invalid. <a href='https://www.github.com/skang188144/FakeNewsDetector'>Find out why.</a>
       </div>
     </div>;
+  
+  // Screen to go to when encountering a general exception in the graph's try-catch
+  const unknownErrorDisplay =
+    <div className='UnknownErrorDisplay'>
+      <div className='Error'>
+        Error
+      </div>
+
+      <div className='ErrorDetails'>
+        We ran into an unknown error. Please try again later.
+      </div>
+    </div>
 
   /*
    * OutputDisplay Async Children Functions
+   *
+   * (as these elements' children and general attribute rely on an async Promise from the graph, these elements must be
+   *  returned in a function, which will be called by another function marked as async in an useEffect hook)
    */
+
+  // Results display header, containing the original query
   const getResultsHeaderDisplay = (queryResults : any) => {
     return <div className='ResultsHeaderDisplay'>
       <div className='Bar'/>
@@ -73,6 +105,7 @@ const App = () => {
     </div>;
   }
 
+  // The sources section of the results display, containing whether the query is true/false, the reasoning, the number of sources, etc.
   const getSourcesResultsDisplay = (queryResults : any) => {
     return <div className='SourcesResultsDisplay'>
       <div className='SourcesHeader'>
@@ -107,6 +140,7 @@ const App = () => {
     </div>;
   }
 
+  // Displayed when the toggle button for viewing the list of sources is triggered
   const getSourcesList = (queryResults : any) => {
     const sources = queryResults.querySearchResults.map((source : any) => {
       return <div className='Source'>
@@ -121,6 +155,7 @@ const App = () => {
     </div>;
   }
 
+  // The LLM opinion section of the results display, containing whether the query is true/false, the reasoning, etc.
   const getInternalResultsDisplay = (queryResults : any) => {
     return <div className='InternalResultsDisplay'>
       <div className='InternalHeader'>
@@ -155,10 +190,13 @@ const App = () => {
   /*
    * useEffect Hooks
    */
+
+  // Set the initial output display to be the initial waiting screen/search bar screen
   useEffect(() => {
     setOutputDisplay([versionDisplay]);
   }, []);
 
+  // Based on changes to the graph query stage/status, change the center container display to the appropriate elements
   useEffect(() => {
     async function setDisplay(versionDisplay : JSX.Element, loadingDisplay : JSX.Element, setOutputDisplay: { (value: SetStateAction<JSX.Element[]>): void; (arg0: JSX.Element[]): void; }) {
       switch (queryState) {
@@ -182,12 +220,16 @@ const App = () => {
           // TODO: set timeout here
           setOutputDisplay([getResultsHeaderDisplay(await queryResults), getSourcesResultsDisplay(await queryResults), getInternalResultsDisplay(await queryResults)]);
           break;
+        case QueryState.ERROR_OTHER:
+          setOutputDisplay([unknownErrorDisplay]);
+          break;
       }
     }
 
     setDisplay(versionDisplay, loadingDisplay, setOutputDisplay);
   }, [queryState]);
 
+  // Show / hide the sources list (in the sources section of the results screen) based on the isSourcesListVisible state
   useEffect(() => {
     async function setSources() {
       if (isSourcesListVisible && queryState === QueryState.QUERY_COMPLETE) {
