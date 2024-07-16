@@ -25,8 +25,6 @@ export async function questionifierAgent (state : GraphState, config? : Runnable
     query: query
   });
 
-  console.log(response.content);
-
   state.querySearchQuestion = response.content.toString();
 
   return state;

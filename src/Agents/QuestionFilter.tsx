@@ -30,8 +30,6 @@ export async function questionFilterAgent (state : GraphState, config? : Runnabl
     query: query
   });
 
-  console.log(response.validity);
-
   if (response.validity === 'VALID_QUERY') {
     state.queryValidity = QueryValidity.VALID_QUERY;
   } else if (response.validity === 'INVALID_QUERY') {

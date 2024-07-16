@@ -124,19 +124,3 @@ export default class FakeNewsDetector {
     });
   }
 }
-
-
-
-// async function main() {
-//   const result1 = createGraph().invoke({ 
-//     llm: new ChatOpenAI({
-//       modelName: 'gpt-4o'
-//     }),
-//     query: 'Pizza is made from dough, sauce, and cheese.'
-//   });
-
-//   const result = await result1.then((r) => [r.query, r.queryValidity, r.queryValidityReasoning, /*r.querySearchResults,*/ r.querySourcesTruthfulness, r.querySourcesTruthfulnessRatio, r.querySourcesTruthfulnessReasoning, r.queryInternalTruthfulness, r.queryInternalTruthfulnessReasoning]);
-//   console.log(result);
-// }
-
-// main();

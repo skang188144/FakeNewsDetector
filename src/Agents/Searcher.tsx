@@ -10,10 +10,11 @@ export async function searcherAgent (state : GraphState, config? : RunnableConfi
 
   const searchTool = new TavilySearchResults({ apiKey: import.meta.env.VITE_TAVILY_API_KEY, maxResults: 10 }); // TODO: increase max limit once in production
   const searchResults = JSON.parse(await searchTool.invoke(query).then());
-  const articleURLs = searchResults.map((obj : any) => obj.url);
-  console.log(articleURLs);
+  console.log(searchResults);
+  state.querySearchResults = searchResults;
+  // const articleURLs = searchResults.map((obj : any) => obj.url);
 
-  state.querySearchResults = articleURLs.join(' , ');
+  // state.querySearchResults = articleURLs.join(' , ');
 
   return state;
 }

@@ -9,6 +9,8 @@ const App = () => {
   const [queryState, setQueryState] = useState(QueryState.READY_TO_RECEIVE);
   const [queryResults, setQueryResults] = useState({});
   const [input, setInput] = useState('');
+  const [sourcesListToggle, setSourcesListToggle] = useState(false);
+  const [sourcesList, setSourcesList] = useState(<></>);
 
   const fakeNewsDetector = new FakeNewsDetector('gpt-4o', setQueryState);
 
@@ -20,11 +22,13 @@ const App = () => {
 
   const versionDisplay =
     <div className='VersionDisplay'>
-      <RingLoader className='RingLoader' color='white' loading={ true }/>
+      <RingLoader className='RingLoader' color='white' loading={ true } size={'5vw'}/>
       <div className='AppTitleText'>
-        fake news detector
+        Waiting for Query
       </div>
       <div className='AppVersionText'>
+        fake news detector
+        <br/>
         v0.0.1
       </div>
     </div>;
@@ -50,16 +54,19 @@ const App = () => {
       </div>
     </div>;
 
-  const getResultsDisplay = (queryResults : any) => {
-    const resultsDisplay =
-    <div className='ResultsDisplay'>
+  const getResultsHeaderDisplay = (queryResults : any) => {
+    return <>
       <div className='ResultsHeader'>
         <div className='Bar'/>
         <div className='Query'>
           "{ queryResults.query }"
         </div>
       </div>
+    </>;
+  }
 
+  const getSourcesResultsDisplay = (queryResults : any) => {
+    return <>
       <div className='SourcesHeader'>
         <div className='Dot'>
           ■
@@ -85,7 +92,11 @@ const App = () => {
       <div className='SourcesReasoning'>
         { queryResults.querySourcesTruthfulnessReasoning }
       </div>
+    </>;
+  }
 
+  const getInternalResultsDisplay = (queryResults : any) => {
+    return <>
       <div className='InternalHeader'>
         <div className='Dot'>
           ■
@@ -103,28 +114,35 @@ const App = () => {
       <div className='InternalReasoning'>
         { queryResults.queryInternalTruthfulnessReasoning }
       </div>
-    </div>;
-
-    return resultsDisplay;
+    </>;
   }
 
+  const getSourcesList = (queryResults : any) => {
+    const sources = queryResults.querySearchResults.map((source : any) => {
+      return <div className='Source'>
+        <a href={ source.url }>
+        • { source.title }
+        </a>
+      </div>
+      });
+    return <div className='SourcesListBody'>
+      { ...sources }
+    </div>;
+  }
 
-
-  const [outputDisplay, setOutputDisplay] = useState(versionDisplay);
+  const [outputDisplay, setOutputDisplay] = useState([versionDisplay]);
 
   useEffect(() => {
-    async function setDisplay(versionDisplay : JSX.Element, loadingDisplay : JSX.Element, setOutputDisplay : { (value : SetStateAction<JSX.Element>) : void; (arg0 : JSX.Element) : void; }) {
-      console.log(queryState);
-
+    async function setDisplay(versionDisplay : JSX.Element, loadingDisplay : JSX.Element, setOutputDisplay: { (value: SetStateAction<JSX.Element[]>): void; (arg0: JSX.Element[]): void; }) {
       switch (queryState) {
         case QueryState.READY_TO_RECEIVE:
-          setOutputDisplay(versionDisplay);
+          setOutputDisplay([versionDisplay]);
           break;
         case QueryState.LOADING_VALIDITY_CHECKING:
-          setOutputDisplay(loadingDisplay);
+          setOutputDisplay([loadingDisplay]);
           break;
         case QueryState.ERROR_VALIDITY:
-          setOutputDisplay(validityErrorDisplay);
+          setOutputDisplay([validityErrorDisplay]);
           break;
         case QueryState.LOADING_SOURCES_SEARCHING:
           document.body.getElementsByClassName('LoadingStageText')[0].innerHTML = 'Searching for sources';
@@ -135,13 +153,26 @@ const App = () => {
         case QueryState.QUERY_COMPLETE:
           document.body.getElementsByClassName('LoadingStageText')[0].innerHTML = 'Query complete';
           // TODO: set timeout here
-          setOutputDisplay(getResultsDisplay(await queryResults));
+          setOutputDisplay([getResultsHeaderDisplay(await queryResults), getSourcesResultsDisplay(await queryResults), getInternalResultsDisplay(await queryResults)]);
           break;
       }
     }
 
     setDisplay(versionDisplay, loadingDisplay, setOutputDisplay);
   }, [queryState]);
+
+  useEffect(() => {
+    async function setSources() {
+      if (sourcesListToggle && queryState === QueryState.QUERY_COMPLETE) {
+        document.body.getElementsByClassName('SourcesListToggleTriangle')[0].innerHTML = '▾';
+        setSourcesList(getSourcesList(await queryResults));
+      } else {
+        document.body.getElementsByClassName('SourcesListToggleTriangle')[0].innerHTML = '▸';
+        setSourcesList(<></>);
+      }
+    }
+    setSources();
+  }, [sourcesListToggle]);
 
   return (
     <div className='App'>
@@ -164,7 +195,18 @@ const App = () => {
 
       <div className='CenterContainer'>
         {queryState === QueryState.READY_TO_RECEIVE && <input className='QueryInput' placeholder='Enter a statement to fact check.' onChange={ (event) => {setInput(event.target.value)} } onKeyDown={ onEnter }/>}
-        { outputDisplay }
+        <div className='ResultsDisplay'>
+          { outputDisplay[0] }
+          { outputDisplay.length >= 2 && outputDisplay[1] }
+          { queryState === QueryState.QUERY_COMPLETE && <div className='SourcesListContainer'>
+            <div className='SourcesListHeaderContainer' onClick={ () => {setSourcesListToggle(!sourcesListToggle)} }>
+              <div className='SourcesListToggleTriangle'>▸</div>
+              <div className='SourcesListHeader'>View Our Sources</div>
+            </div>
+            { sourcesList }
+          </div>}
+          {outputDisplay.length >= 3 && outputDisplay[2]}
+        </div>
       </div>
     </div>
   );

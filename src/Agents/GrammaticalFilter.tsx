@@ -34,8 +34,6 @@ export async function grammaticalFilterAgent (state : GraphState, config? : Runn
     query: query
   });
 
-  console.log(response.validity);
-
   if (response.validity === 'VALID_QUERY') {
     state.queryValidity = QueryValidity.VALID_QUERY;
   } else if (response.validity === 'INVALID_QUERY') {

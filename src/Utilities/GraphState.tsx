@@ -7,7 +7,7 @@ export default interface GraphState {
     queryValidity : QueryValidity;
     queryValidityReasoning : string;
     querySearchQuestion : string;
-    querySearchResults : string;
+    querySearchResults : any;
     querySourcesTruthfulness : QueryTruthfulness;
     querySourcesTruthfulnessRatio : string;
     querySourcesTruthfulnessReasoning : string;

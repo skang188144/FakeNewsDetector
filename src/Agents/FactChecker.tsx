@@ -32,10 +32,8 @@ export async function factCheckerAgent (state : GraphState, config? : RunnableCo
 
   const response = await chain.invoke({
     query: query,
-    querySearchResults: querySearchResults
+    querySearchResults: querySearchResults.map((obj : any) => obj.url).join(' , ')
   });
-
-  console.log(response);
 
   if (response.sourcesTruthfulness === 'TRUE_QUERY') {
     state.querySourcesTruthfulness = QueryTruthfulness.TRUE_QUERY;
@@ -61,13 +59,3 @@ export async function factCheckerAgent (state : GraphState, config? : RunnableCo
 
   return state;
 }
-
-export function factCheckerRouter(state : GraphState) {
-  const { querySourcesTruthfulness: queryTruthfulness } = state;
-
-  if (queryTruthfulness === QueryTruthfulness.TRUE_QUERY) {
-    return 'searcherAgent';
-  } else {
-    return 'end';
-  }
-};
