@@ -47,12 +47,12 @@ export default class FakeNewsDetector {
   private graphState : StateGraphArgs<GraphState>['channels'] = {
     llm: {
       value: () => new ChatOpenAI({
-        // apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+        apiKey: 'sk-proj-OeaNVSaHieWcXviMKoVBT3BlbkFJ7lZ91DsYjvXjoE4FwOdE',
         modelName: 'gpt-4o',
         temperature: 0
       }),
       default: () => new ChatOpenAI({
-        // apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+        apiKey: 'sk-proj-OeaNVSaHieWcXviMKoVBT3BlbkFJ7lZ91DsYjvXjoE4FwOdE',
         modelName: 'gpt-4o',
         temperature: 0
       })
@@ -128,7 +128,7 @@ export default class FakeNewsDetector {
     try {
       return this.graph.invoke({
         llm: new ChatOpenAI({
-          // apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+          apiKey: 'sk-proj-OeaNVSaHieWcXviMKoVBT3BlbkFJ7lZ91DsYjvXjoE4FwOdE',
           modelName: this.chatGPTModelName,
           temperature: 0
         }), 
