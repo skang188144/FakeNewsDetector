@@ -1,30 +1,79 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<br />
+<div align="center">
+  <a href="https://github.com/skang188144/FakeNewsDetector">
+    <img src="public/icon-light.svg" alt="Logo" width="150" height="150">
+  </a>
 
-Currently, two official plugins are available:
+  <h1 align="center">FakeNewsDetector</h1>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  <p align="center">
+    An AI fact checker web application designed with React, LangGraph, and Tavily AI.
+    <br />
+  </p>
+</div>
 
-## Expanding the ESLint configuration
+[
+![GitHub Forks](https://img.shields.io/github/forks/skang188144/FakeNewsDetector.svg?label=Forks)](https://github.com/skang188144/FakeNewsDetector/forks) [![GitHub Stars](https://img.shields.io/github/stars/skang188144/FakeNewsDetector.svg?label=Stars)](https://github.com/skang188144/FakeNewsDetector/stargazers) [![GitHub Contributors](https://img.shields.io/github/contributors/skang188144/FakeNewsDetector.svg?label=Contributors)](https://github.com/skang188144/FakeNewsDetector/graphs/contributors) [![GitHub Issues](https://img.shields.io/github/issues/skang188144/FakeNewsDetector.svg?label=Issues)](https://github.com/skang188144/FakeNewsDetector/issues) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Table of Contents 
+- [Video Summary](#video-summary) 
+- [Overview](#overview) 
+- [Project Goals](#project-goals) 
+- [System Architecture](#system-architecture) 
+- [Technical Challenges and Solutions](#technical-challenges-and-solutions) 
+- [Conclusion](#conclusion) 
+- [Usage](#usage) 
+- [License](#license)
+- [Contact](#contact)
 
-- Configure the top-level `parserOptions` property like this:
+## Video Summary
+<video>
+	<source src="/Project Description.mp4" type="video/mp4"/>
+</video>
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Overview
+FakeNewsDetector is a fact checker web application designed to determine if a given claim is true or false. This application leverages Retrieval-Augmented Generation to supplement existing large language models with sources from the Internet, allowing these models to make better decisions on whether a statement is true or false, based on what the majority of the sources conclude.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Project Goals
+- **Fact Checking**: Determine the truthfulness or falsity of a claim using large language models.
+- **Retrieval-Augmented Generation**: Supplement the decision-making process with external sources to mitigate hallucinations common in LLMs. 
+- **User-Friendly Interface**: Provide a clean and easy-to-use user interface to interact with the application.
+
+## System Architecture 
+This application is designed with a series of specialized agents nodes within a graph to process user queries: 
+1. **User Query**: the user inputs their claim. 
+2. **Filtering Agents**: the Grammatical, Proposition, Opinion, Public Knowledge, and Opinion filter agents all work to stop invalid or malformed queries.
+3.  **Searcher Agent**: the Searcher agent uses the Tavily AI tool to retrieve sources relevant to the query from the Internet.
+5. **Fact Checker Agent**: the Fact Checker agent analyzes sources, counts agreements and disagreements, and makes a final determination.
+
+## Technical Challenges and Solutions 
+1. **Graph State Management**: Encountered an issue figuring out how to access the graph's state in the middle of a graph's run. Specifically, for the React App component to be updated with the right elements for the loading screen, I needed to store that state using a useState hook, and modify that state at each node of the graph. Although this is most likely bad practice, with the limited time that I had, I decided to apply a quick fix by simply feeding the FakeNewsDetector object with the React setState method, and maintained that method in the internal graph state.
+2.  **Accessing External Sources**: Another issue was with the ChatGPT model being reluctant to actually crawl through the provided sources. After some research, it seemed like others have had similar issues with ChatGPT 4 being reluctant to search through URLs that were directly provided to it. I tried a number of different solutions, including many Web Loaders in the LangChain library such as Cheerio or Puppeteer, but it seems to be deprecated or non-functioning. This was a bit of a weird problem, but one that I would definitely try to fix given more time.
+
+## Conclusion 
+Despite the challenges and tight deadlines, this project has been a valuable learning experience, allowing me to hone my skills in AI, web development, and project management. Whether or not I get the position at Tavily, I believe this project can stand on its own as a testament to my growth and capability.
+
+## Usage
+You can use FakeNewsDetector at <a href='https://www.skang188144.github.io/FakeNewsDetector/'>skang188144.github.io/FakeNewsDetector/</a>.
+
+To build the project on your own,
+1. Install Node.js
+2. Clone the repository: 
+   ```bash 
+   git clone https://github.com/skang188144/FakeNewsDetector.git
+   ```
+3. Install dependencies
+   ```bash 
+   npm install
+   ```
+4. Run the development server
+   ```bash 
+   npx vite
+   ```
+
+## License
+FakeNewsDetector is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Contact
+For inquiries or suggestions, contact the developer at skang188144@gmail.com.
