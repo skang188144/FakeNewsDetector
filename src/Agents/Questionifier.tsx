@@ -1,4 +1,4 @@
-import GraphState from '../utilities/GraphState.tsx';
+import GraphState from '../Utilities/GraphState.tsx';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 export async function questionifierAgent (state : GraphState) {

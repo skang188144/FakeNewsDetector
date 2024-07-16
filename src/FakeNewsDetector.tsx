@@ -1,15 +1,15 @@
 import { END, START, StateGraph, StateGraphArgs } from '@langchain/langgraph/web'
 import { ChatOpenAI } from '@langchain/openai';
-import GraphState from './utilities/GraphState';
-import { grammaticalFilterAgent, grammaticalFilterRouter } from './agents/GrammaticalFilter';
-import { propositionFilterAgent, propositionFilterRouter } from './agents/PropositionFilter';
-import { questionFilterAgent, questionFilterRouter } from './agents/QuestionFilter';
-import { opinionFilterAgent, opinionFilterRouter } from './agents/OpinionFilter';
-import { publicKnowledgeFilterAgent, publicKnowledgeFilterRouter } from './agents/PublicKnowledgeFilter';
-import { questionifierAgent } from './agents/Questionifier';
-import { searcherAgent } from './agents/Searcher';
-import { factCheckerAgent } from './agents/FactChecker';
-import { QueryState } from './utilities/StatusCodes';
+import GraphState from './Utilities/GraphState';
+import { grammaticalFilterAgent, grammaticalFilterRouter } from './Agents/GrammaticalFilter';
+import { propositionFilterAgent, propositionFilterRouter } from './Agents/PropositionFilter';
+import { questionFilterAgent, questionFilterRouter } from './Agents/QuestionFilter';
+import { opinionFilterAgent, opinionFilterRouter } from './Agents/OpinionFilter';
+import { publicKnowledgeFilterAgent, publicKnowledgeFilterRouter } from './Agents/PublicKnowledgeFilter';
+import { questionifierAgent } from './Agents/Questionifier';
+import { searcherAgent } from './Agents/Searcher';
+import { factCheckerAgent } from './Agents/FactChecker';
+import { QueryState } from './Utilities/StatusCodes';
 import { Dispatch, SetStateAction } from 'react';
 
 export default class FakeNewsDetector {

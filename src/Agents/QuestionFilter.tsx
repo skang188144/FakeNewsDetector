@@ -1,7 +1,7 @@
-import GraphState from '../utilities/GraphState.tsx';
+import GraphState from '../Utilities/GraphState.tsx';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { QueryState, QueryValidity } from '../utilities/StatusCodes.tsx';
-import { queryValidityOutputStructure } from '../utilities/OutputStructures.tsx';
+import { QueryState, QueryValidity } from '../Utilities/StatusCodes.tsx';
+import { queryValidityOutputStructure } from '../Utilities/OutputStructures.tsx';
 
 export async function questionFilterAgent (state : GraphState) {
   /*

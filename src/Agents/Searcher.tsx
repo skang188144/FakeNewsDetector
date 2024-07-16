@@ -1,6 +1,6 @@
-import GraphState from '../utilities/GraphState.tsx';
+import GraphState from '../Utilities/GraphState.tsx';
 import { TavilySearchResults } from "@langchain/community/tools/tavily_search";
-import { QueryState } from '../utilities/StatusCodes.tsx';
+import { QueryState } from '../Utilities/StatusCodes.tsx';
 
 export async function searcherAgent (state : GraphState) {
   /*

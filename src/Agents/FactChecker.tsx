@@ -1,7 +1,7 @@
-import GraphState from '../utilities/GraphState.tsx';
+import GraphState from '../Utilities/GraphState.tsx';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { QueryState, QueryTruthfulness } from '../utilities/StatusCodes.tsx';
-import { queryTruthfulnessOutputStructure } from '../utilities/OutputStructures.tsx';
+import { QueryState, QueryTruthfulness } from '../Utilities/StatusCodes.tsx';
+import { queryTruthfulnessOutputStructure } from '../Utilities/OutputStructures.tsx';
 
 export async function factCheckerAgent (state : GraphState) {
   /*
