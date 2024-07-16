@@ -1,8 +1,7 @@
 import GraphState from '../utilities/GraphState.tsx';
-import { RunnableConfig } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
-export async function questionifierAgent (state : GraphState, config? : RunnableConfig) {
+export async function questionifierAgent (state : GraphState) {
   /*
    * State
    */
