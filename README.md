@@ -9,8 +9,8 @@
 
   <p align="center">
     An AI fact checker web application designed with React, LangGraph, and Tavily AI.
-    https://skang188144.github.io/FakeNewsDetector/
     <br />
+    https://skang188144.github.io/FakeNewsDetector/
   </p>
 </div>
 
