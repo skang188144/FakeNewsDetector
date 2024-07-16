@@ -8,7 +8,10 @@
   flex-direction: column;
 }
 
-.LeftColumn {
+/*
+ * Background
+ */
+.BackgroundLeft {
   height: inherit;
   width: 34vw;
   left: 0;
@@ -17,7 +20,7 @@
   position: absolute;
 }
 
-.RightColumn {
+.BackgroundRight {
   height: inherit;
   width: 66vw;
   right: 0;
@@ -26,13 +29,16 @@
   position: absolute;
 }
 
+/*
+ * Title
+ */
 .TitleContainer {
   width: 100vw;
   display: flex;
   flex-direction: row;
 }
 
-.TitleContainer .TitleBeginning {
+.TitleContainer .TitleStart {
   width: 34vw;
   padding-right: 0.6vw;
   text-align: end;
@@ -45,7 +51,7 @@
   letter-spacing: -0.3vw;
 }
 
-.TitleContainer .TitleEndingContainer {
+.TitleContainer .TitleEndContainer {
   width: 66vw;
   padding-left: 0.6vw;
   z-index: 1;
@@ -53,7 +59,7 @@
   flex-direction: column;
 }
 
-.TitleEndingContainer .TitleEnding {
+.TitleEndContainer .TitleEnd {
   color: white;
   font-family: 'Mosk Ultra-Bold 900';
   font-size: 7vw;
@@ -62,7 +68,7 @@
   letter-spacing: -0.3vw;
 }
 
-.TitleEndingContainer .Byline {
+.TitleEndContainer .Byline {
   margin-right: auto;
   color: rgb(157, 157, 157);
   font-family: 'Mosk Medium 500';
@@ -71,7 +77,10 @@
   letter-spacing: -0.05vw;
 }
 
-.CenterContainer {
+/*
+ * Center Display Container
+ */
+.OutputDisplayContainer {
   height: 65vh;
   width: 70vw;
   margin: auto;
@@ -85,6 +94,20 @@
   overflow: hidden;
 }
 
+/*
+ * Output Display Wrapper
+ */
+.OutputDisplay {
+  height: inherit;
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+/*
+ * Version Display
+ */
 .QueryInput {
   width: 56vw;
   margin: auto;
@@ -116,7 +139,7 @@
   margin-bottom: max(40px, 7vh);
 }
 
-.VersionDisplay .AppTitleText {
+.VersionDisplay .Status {
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
@@ -127,7 +150,7 @@
   letter-spacing: -0.05vw;
 }
 
-.VersionDisplay .AppVersionText {
+.VersionDisplay .AppTitleVersion {
   margin-left: auto;
   margin-right: auto;
   margin-top: 2vh;
@@ -140,6 +163,9 @@
   letter-spacing: -0.05vw;
 }
 
+/*
+ * Loading Display
+ */
 .LoadingDisplay {
   height: 40vh;
   width: 56vw;
@@ -163,7 +189,7 @@
   letter-spacing: -0.05vw;
 }
 
-.LoadingDisplay .LoadingStageText {
+.LoadingDisplay .LoadingStatus {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
@@ -174,6 +200,9 @@
   letter-spacing: -0.05vw;
 }
 
+/*
+ * Validity Error Display
+ */
 .ValidityErrorDisplay {
   height: 40vh;
   width: 56vw;
@@ -182,7 +211,7 @@
   flex-direction: column;
 }
 
-.ValidityErrorDisplay .ErrorText {
+.ValidityErrorDisplay .Error {
   margin-left: auto;
   margin-right: auto;
   margin-top: auto;
@@ -193,7 +222,7 @@
   letter-spacing: -0.05vw;
 }
 
-.ValidityErrorDisplay .ErrorDetailsText {
+.ValidityErrorDisplay .ErrorDetails {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
@@ -204,32 +233,27 @@
   letter-spacing: -0.05vw;
 }
 
-.ErrorDetailsText a {
+.ErrorDetails a {
   color: gray;
 }
 
-.ResultsDisplay {
-  height: inherit;
-  width: inherit;
-  display: flex;
-  flex-direction: column;
-  overflow: scroll;
-}
-
-.ResultsDisplay .ResultsHeader {
+/*
+ * Results Display
+ */
+.OutputDisplay .ResultsHeaderDisplay {
   width: inherit;
   display: flex;
   flex-direction: row;
 }
 
-.ResultsHeader .Bar {
+.ResultsHeaderDisplay .Bar {
   height: inherit;
   width: 1vw;
   margin-right: 1vw;
   background-color: white;
 }
 
-.ResultsHeader .Query {
+.ResultsHeaderDisplay .Query {
   margin-right: 3vw;
   color: white;
   font-family: 'Mosk Ultra-Bold 900';
@@ -238,7 +262,15 @@
   letter-spacing: -0.05vw;
 }
 
-.ResultsDisplay .SourcesHeader {
+/*
+ * Sources Results Display
+ */
+.OutputDisplay .SourcesResultsDisplay {
+  display: flex;
+  flex-direction: column;
+}
+
+.SourcesResultsDisplay .SourcesHeader {
   margin-top: 7vh;
   margin-right: auto;
   display: flex;
@@ -266,7 +298,7 @@
   letter-spacing: -0.05vw;
 }
 
-.ResultsDisplay .SourcesResult {
+.SourcesResultsDisplay .SourcesResult {
   margin-top: 1vh;
   margin-left: 2vw;
   margin-right: 2vw;
@@ -309,7 +341,7 @@
   letter-spacing: -0.05vw;
 }
 
-.ResultsDisplay .SourcesReasoning {
+.SourcesResultsDisplay .SourcesReasoning {
   margin-left: 2vw;
   margin-right: 2vw;
   margin-top: 3vh;
@@ -320,21 +352,24 @@
   letter-spacing: -0.05vw;
 }
 
-.ResultsDisplay .SourcesListContainer {
+/*
+ * Sources List Display
+ */
+.OutputDisplay .SourcesListDisplay {
   margin-top: 3vh;
   margin-left: 2vw;
   display: flex;
   flex-direction: column;
 }
 
-.SourcesListContainer .SourcesListHeaderContainer {
+.SourcesListDisplay .HeaderContainer {
   width: fit-content;
   display: flex;
   flex-direction: row;
   cursor: pointer;
 }
 
-.SourcesListHeaderContainer .SourcesListToggleTriangle {
+.HeaderContainer .ToggleTriangle {
   color: rgba(255, 255, 255, 0.86);
   font-family: 'Mosk Light 300';
   font-size: 1.5vw;
@@ -343,7 +378,7 @@
   user-select: none;
 }
 
-.SourcesListHeaderContainer .SourcesListHeader {
+.HeaderContainer .Header {
   color: rgba(255, 255, 255, 0.86);
   font-family: 'Mosk Light 300';
   font-size: 1.5vw;
@@ -353,14 +388,14 @@
   user-select: none;
 }
 
-.SourcesListContainer .SourcesListBody {
+.SourcesListDisplay .SourcesList {
   margin-left: 1vw;
   margin-right: 1vw;
   display: flex;
   flex-direction: column;
 }
 
-.SourcesListBody .Source {
+.SourcesList .Source {
   margin-bottom: 1vh;
   padding: 1vw;
   border-radius: 10px;
@@ -375,7 +410,15 @@
   text-decoration: none;
 }
 
-.ResultsDisplay .InternalHeader {
+/*
+ * Internal Results Display
+ */
+.OutputDisplay .InternalResultsDisplay {
+  display: flex;
+  flex-direction: column;
+}
+
+.InternalResultsDisplay .InternalHeader {
   margin-top: 7vh;
   margin-right: auto;
   display: flex;
@@ -403,7 +446,7 @@
   letter-spacing: -0.05vw;
 }
 
-.ResultsDisplay .InternalResult {
+.InternalResultsDisplay .InternalResult {
   margin-left: 2vw;
   margin-right: 2vw;
   margin-top: 1vh;
@@ -425,7 +468,7 @@
   letter-spacing: -0.05vw;
 }
 
-.ResultsDisplay .InternalReasoning {
+.InternalResultsDisplay .InternalReasoning {
   margin-left: 2vw;
   margin-right: 2vw;
   margin-top: 3vh;

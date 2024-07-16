@@ -5,11 +5,18 @@ import { QueryState, QueryTruthfulness } from '../utilities/StatusCodes.tsx';
 import { queryTruthfulnessOutputStructure } from '../utilities/OutputStructures.tsx';
 
 export async function factCheckerAgent (state : GraphState, config? : RunnableConfig) {
+  /*
+   * State
+   */
   const { query, querySearchResults, setQueryState } = state;
   const llm = state.llm.withStructuredOutput(queryTruthfulnessOutputStructure);
 
+  // Update the App React component on what stage the graph is in
   setQueryState(QueryState.LOADING_FACT_CHECKING);
-
+  
+  /*
+   * AI Prompt
+   */
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are a fact checker for a misinformation detector application. Your sole job is to '
              + 'determine if the query you receive is true or false. You will be given a list of sources '

@@ -5,9 +5,15 @@ import { QueryState, QueryValidity } from '../utilities/StatusCodes.tsx';
 import { queryValidityOutputStructure } from '../utilities/OutputStructures.tsx';
 
 export async function opinionFilterAgent (state : GraphState, config? : RunnableConfig) {
+  /*
+   * State
+   */
   const { query } = state;
   const llm = state.llm.withStructuredOutput(queryValidityOutputStructure);
 
+  /*
+   * AI Prompt
+   */
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are an AI agent for a certain web application. Your job is to receive queries, and'
              + 'determine if a query can pass through to the next AI agent in the chain. The next agent '

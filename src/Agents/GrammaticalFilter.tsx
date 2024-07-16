@@ -5,11 +5,18 @@ import { QueryState, QueryValidity } from '../utilities/StatusCodes.tsx';
 import { queryValidityOutputStructure } from '../utilities/OutputStructures.tsx';
 
 export async function grammaticalFilterAgent (state : GraphState, config? : RunnableConfig) {
+  /*
+   * State
+   */
   const { query, setQueryState } = state;
   const llm = state.llm.withStructuredOutput(queryValidityOutputStructure);
 
+  // Update the App React component on what stage the graph is in
   setQueryState(QueryState.LOADING_VALIDITY_CHECKING);
 
+  /*
+   * AI Prompt
+   */
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are an AI agent for a certain web application. Your job is to receive queries, and'
              + 'determine if a query can pass through to the next AI agent in the chain. The next agent '

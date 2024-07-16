@@ -1,4 +1,4 @@
-import { END, MemorySaver, START, StateGraph, StateGraphArgs } from '@langchain/langgraph/web'
+import { END, START, StateGraph, StateGraphArgs } from '@langchain/langgraph/web'
 import { ChatOpenAI } from '@langchain/openai';
 import GraphState from './utilities/GraphState';
 import { grammaticalFilterAgent, grammaticalFilterRouter } from './agents/GrammaticalFilter';
@@ -13,17 +13,27 @@ import { QueryState } from './utilities/StatusCodes';
 import { Dispatch, SetStateAction } from 'react';
 
 export default class FakeNewsDetector {
+  /*
+   * Private Fields
+   */
   private chatGPTModelName;
   private graph;
+
+  /*
+   * Public Fields
+   */
   public static setComponentQueryState: Dispatch<SetStateAction<QueryState>>;
 
+  /*
+   * Constructor
+   */
   public constructor(chatGPTModelName : string, setQueryState: Dispatch<SetStateAction<QueryState>>) {
     this.chatGPTModelName = chatGPTModelName;
     this.graph = this.createGraph();
     FakeNewsDetector.setComponentQueryState = setQueryState;
   }
   
-  /**
+  /*
    * A reducer will:
    * - keep track of the current state
    * - take in new information that causes state modification
@@ -31,10 +41,9 @@ export default class FakeNewsDetector {
    * - return this new state so the application can use it
    */
 
-  /**
+  /*
    * Initialize the graph state
    */
-
   private graphState : StateGraphArgs<GraphState>['channels'] = {
     llm: {
       value: () => new ChatOpenAI({
@@ -61,6 +70,9 @@ export default class FakeNewsDetector {
     setQueryState: null
   };
 
+  /*
+   * Create the graph
+   */
   private createGraph() {
     const graph = new StateGraph<GraphState>({
       channels: this.graphState
@@ -94,9 +106,7 @@ export default class FakeNewsDetector {
       questionifierAgent: 'questionifierAgent',
       end: END
     })
-    // .addEdge('questionifierAgent', END)
     .addEdge('questionifierAgent', 'searcherAgent')
-    // .addEdge('searcherAgent', END)
     .addEdge('searcherAgent', 'factCheckerAgent')
     .addEdge('factCheckerAgent', END)
     .compile();
@@ -104,14 +114,16 @@ export default class FakeNewsDetector {
     return graph;
   }
 
+  /*
+   * Set the graph query status, for the App React component to have updates on what stage in the query run the graph is in.
+   */
   public setQueryState(queryState : QueryState) {
     FakeNewsDetector.setComponentQueryState(queryState);
   }
 
-  public getGraph() {
-    return this.graph;
-  }
-
+  /*
+   * Run the query through the graph
+   */
   public runQuery(query: string) {
     return this.graph.invoke({
       llm: new ChatOpenAI({

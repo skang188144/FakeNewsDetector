@@ -3,8 +3,14 @@ import { RunnableConfig } from "@langchain/core/runnables";
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 export async function questionifierAgent (state : GraphState, config? : RunnableConfig) {
+  /*
+   * State
+   */
   const { llm, query } = state;
 
+  /*
+   * AI Prompt
+   */
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are an AI agent for a certain web application. Your job is to receive a query, '
              + 'and turn that query into a question. Queries are guaranteed to be a statement that can '
