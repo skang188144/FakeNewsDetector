@@ -232,6 +232,10 @@ const App = () => {
   // Show / hide the sources list (in the sources section of the results screen) based on the isSourcesListVisible state
   useEffect(() => {
     async function setSources() {
+      if (document.body.getElementsByClassName('ToggleTriangle')[0] === undefined) {
+        return;
+      }
+
       if (isSourcesListVisible && queryState === QueryState.QUERY_COMPLETE) {
         document.body.getElementsByClassName('ToggleTriangle')[0].innerHTML = '▾';
         setSourcesList(getSourcesList(await queryResults));
@@ -262,7 +266,9 @@ const App = () => {
           </div>
 
           <div className='Byline'>
-            by Sanghyeok Kang, powered by Tavily AI
+            by Sanghyeok Kang, powered by
+            <div className='TavilyText'>Tavily AI</div>
+            <img className='TavilyIcon' src='https://tavily.com/_next/static/media/logo.b3d36071.svg'></img>
           </div>
         </div>
       </div>

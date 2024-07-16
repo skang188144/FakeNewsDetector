@@ -13,14 +13,14 @@ export async function factCheckerAgent (state : GraphState, config? : RunnableCo
 
   // Update the App React component on what stage the graph is in
   setQueryState(QueryState.LOADING_FACT_CHECKING);
-  
+
   /*
    * AI Prompt
    */
   const prompt = ChatPromptTemplate.fromMessages([
     ['system', 'You are a fact checker for a misinformation detector application. Your sole job is to '
              + 'determine if the query you receive is true or false. You will be given a list of sources '
-             + 'from the Internet to parse through. You must extract the core points from each source, '
+             + 'from the Internet to parse through. You must extract the a detailed summary of each source, '
              + 'and determine if each source points to the initial query being true or false. In your '
              + 'final output, you must include how many sources pointed to your conclusion, and how '
              + 'many did not agree. In a separate section, include your own determination of whether the '
