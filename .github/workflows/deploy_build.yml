@@ -29,23 +29,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
+        env: 
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_TAVILY_API_KEY: ${{ secrets.VITE_TAVILY_API_KEY }}
         uses: actions/checkout@v4
       - name: Set up Node
+        env: 
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_TAVILY_API_KEY: ${{ secrets.VITE_TAVILY_API_KEY }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
       - name: Install dependencies
+        env: 
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_TAVILY_API_KEY: ${{ secrets.VITE_TAVILY_API_KEY }}
         run: npm ci
       - name: Build
+        env: 
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_TAVILY_API_KEY: ${{ secrets.VITE_TAVILY_API_KEY }}
         run: npm run build
       - name: Setup Pages
+        env: 
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_TAVILY_API_KEY: ${{ secrets.VITE_TAVILY_API_KEY }}
         uses: actions/configure-pages@v4
       - name: Upload artifact
+        env: 
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_TAVILY_API_KEY: ${{ secrets.VITE_TAVILY_API_KEY }}
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist folder
           path: './dist'
       - name: Deploy to GitHub Pages
+        env: 
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_TAVILY_API_KEY: ${{ secrets.VITE_TAVILY_API_KEY }}
         id: deployment
         uses: actions/deploy-pages@v4
