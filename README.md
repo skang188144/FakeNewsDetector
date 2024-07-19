@@ -58,20 +58,20 @@ You can use FakeNewsDetector at https://skang188144.github.io/FakeNewsDetector/
 
 To build the project on your own,
 1. Install Node.js
-2. Create your own .env file with the following API keys
+2. Clone the repository: 
+   ```bash 
+   git clone https://github.com/skang188144/FakeNewsDetector.git
+   ```
+3. Create your own .env file with the following API keys
    ```bash 
    VITE_OPENAI_API_KEY=your_openai_api_key
    VITE_TAVILY_API_KEY=your_tavily_api_key
    ```
-4. Clone the repository: 
-   ```bash 
-   git clone https://github.com/skang188144/FakeNewsDetector.git
-   ```
-5. Install dependencies
+4. Install dependencies
    ```bash 
    npm install
    ```
-6. Run the development server
+5. Run the development server
    ```bash 
    npx vite
    ```
