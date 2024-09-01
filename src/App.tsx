@@ -53,7 +53,7 @@ const App = () => {
   const loadingDisplay =
     <div className='LoadingDisplay'>
       <HashLoader className='HashLoader' color='white' loading={ true }/>
- 
+  
       <div className='LoadingText'>
         Loading. . .
       </div>
